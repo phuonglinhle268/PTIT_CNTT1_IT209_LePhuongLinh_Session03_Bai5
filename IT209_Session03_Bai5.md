@@ -157,23 +157,4 @@ root@ptit-web-devops:~# tail -f /opt/my-app/logs/access.log
 **Nhận xét kết quả:**
 - Mã phản hồi `HTTP 200` hiển thị đầy đủ nội dung HTML mới.
 - Tiến trình Nginx tự động sinh file `access.log` và ghi log thành công vào `/opt/my-app/logs/access.log` nhờ quyền `775` của group `www-data`.
-- Không có lỗi `403 Forbidden` hay lỗi phân quyền ghi log.
-
----
-
-## 3. Tổng kết & Đánh giá kết quả
-
-| Hạng mục kiểm tra | Yêu cầu đề bài | Kết quả thực tế | Trạng thái |
-|---|---|---|---|
-| **Vị trí lưu trữ** | Chuyển sang `/opt/my-app/` (`html/` và `logs/`) | Đã tạo và cấu hình đúng tại `/opt/my-app/` | Đạt yêu cầu |
-| **Quyền sở hữu (chown)** | Thuộc về `devops:www-data` | `drwxr-xr-x` devops www-data | Đạt yêu cầu |
-| **Phân quyền truy cập (chmod)** | `755`/`644` cho web, `775` cho logs | Thư mục: `755`, File: `644`, Logs: `775` | Đạt yêu cầu |
-| **Thao tác ghi của user devops** | Sửa file không cần sudo | Ghi `Update Test` thành công | Đạt yêu cầu |
-| **Hoạt động của Nginx** | Không lỗi 403, phục vụ đúng mã nguồn | Trả về HTTP 200 OK với đầy đủ nội dung | Đạt yêu cầu |
-| **Ghi nhận nhật ký (Logging)** | Tự động ghi vào `/opt/my-app/logs/` | Log truy cập ghi nhận chuẩn xác tại `access.log` | Đạt yêu cầu |
-
----
-
-## 4. Bài học kinh nghiệm & Tiêu chuẩn DevOps
-1. **Cô lập ứng dụng**: Việc tách mã nguồn sang `/opt/` giúp hệ thống quản lý các ứng dụng độc lập tốt hơn, tránh xung đột với các gói hệ thống mặc định của Ubuntu.
-2. **Quyền ghi Log tối thiểu**: Cung cấp quyền ghi cho nhóm `www-data` tại duy nhất thư mục `logs/` (`775`), trong khi thư mục mã nguồn `html/` chỉ cho phép `www-data` quyền đọc (`755`/`644`), giúp ngăn chặn triệt để nguy cơ tin tặc chèn mã độc (webshell) trực tiếp vào thư mục web thông qua lỗi của web server.
+- Không có lỗi `403 Forbidden` hay lỗi phân quyền ghi log
